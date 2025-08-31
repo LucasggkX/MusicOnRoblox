@@ -238,7 +238,6 @@ BtnClose.Position = UDim2.new(1, -54, 0, 6)
 BtnClose.BackgroundTransparency = 1
 BtnClose.Text = ""
 BtnClose.TextScaled = true
-BtnClose.Draggable = true
 
 local IconClose = Instance.new("TextLabel", BtnClose)
 IconClose.Size = UDim2.new(1, 0, 1, 0)
