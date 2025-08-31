@@ -1,5 +1,7 @@
 # MusicHub - Roblox Music Script
 
+![MusicHub UI](https://github.com/LucasggkX/MusicOnRoblox/blob/main/Image)
+
 ## Descrição
 
 **MusicHub** é um script para Roblox que permite tocar, gerenciar e pré-visualizar músicas diretamente no jogo com uma interface gráfica elegante. Ele oferece recursos simples e práticos para qualquer jogador que queira ouvir suas músicas favoritas enquanto joga.
