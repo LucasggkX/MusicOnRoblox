@@ -37,4 +37,4 @@
 2. Cole o seguinte comando para carregar o MusicHub:
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/LucasggkX/MusicOnRoblox/refs/heads/main/Protected_6864152412014451.lua.txt"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/LucasggkX/MusicOnRoblox/refs/heads/main/MadeByLucas.lua"))()
