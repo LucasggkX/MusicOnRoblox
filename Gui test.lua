@@ -169,46 +169,26 @@ local function Create(className, properties, children)
 	return obj
 end
 
+local RunService = game:GetService("RunService")
+local RenderStepped = RunService.RenderStepped
+
 local function CreateSignal()
-	local connections = {}
-	local signal = {}
-
-	function signal:Connect(func)
-		local connection = {}
-		connection.Function = func
-		connections[connection] = true
-		return connection
-	end
-
-	function signal:Disconnect(connection)
-		if connections[connection] then
-			connections[connection] = nil
-		end
-	end
-
-	function signal:Fire(...)
-		for connection, _ in pairs(connections) do
-			task.spawn(connection.Function, ...)
-		end
-	end
-
-	function signal:Wait()
-		local thread = coroutine.running()
-		local connection
-		connection = signal:Connect(function(...)
-			signal:Disconnect(connection)
-			task.spawn(thread, ...)
-		end)
-		coroutine.yield()
-	end
-	
-	function signal:Destroy()
-		for connection, _ in pairs(connections) do
-			connections[connection] = nil
-		end
-	end
-
-	return signal
+    local bindable = Instance.new("BindableEvent")
+    local signal = {}
+    
+    function signal:Fire(...)
+        bindable:Fire(...)
+    end
+    
+    function signal:Connect(callback)
+        return bindable.Event:Connect(callback)
+    end
+    
+    function signal:Destroy()
+        bindable:Destroy()
+    end
+    
+    return signal
 end
 
 local function CreateSpring(initialValue, frequency, dampingRatio)
@@ -236,11 +216,16 @@ local function CreateSpring(initialValue, frequency, dampingRatio)
 		local decay = math.exp(-d * f * dt)
 
 		local p1, v1
-		local c = math.sqrt(1 - d * d)
+		local c = math.sqrt(math.max(0, 1 - d * d)) -- Garante que 'c' não seja imaginário
+		
 		local i = math.cos(f * c * dt)
 		local j = math.sin(f * c * dt)
-		local z = j / (c + 1e-9)
-		local y = j / (f * c + 1e-9)
+
+		local safeC = math.max(c, 1e-9)
+		local safeFC = math.max(f * safeC, 1e-9)
+
+		local z = j / safeC
+		local y = j / safeFC
 
 		p1 = (offset * (i + d * z) + v0 * y) * decay + g
 		v1 = (v0 * (i - z * d) - offset * (z * f)) * decay
@@ -279,6 +264,7 @@ local function CreateSpring(initialValue, frequency, dampingRatio)
 
 	return spring
 end
+
 
 local function SafeCallback(func, ...)
 	if not func then return end
